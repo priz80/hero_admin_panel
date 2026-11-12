@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
 import { filterChanged } from '../../actions';
 
 // Задача для этого компонента:
@@ -16,21 +17,27 @@ const HeroesFilters = () => {
         dispatch(filterChanged(filter));
     }
 
+    const getBtnClass = (filter) => {
+        switch (filter) {
+            case 'all': return 'btn btn-outline-dark';
+            case 'fire': return 'btn btn-outline-danger';
+            case 'water': return 'btn btn-outline-primary';
+            case 'wind': return 'btn btn-outline-success';
+            case 'earth': return 'btn btn-outline-secondary';
+            default: return 'btn btn-outline-dark';
+        }
+    }
+
     return (
         <div className="card shadow-lg mt-4">
             <div className="card-body">
                 <p className="card-text">Отфильтруйте героев по элементам</p>
                 <div className="btn-group">
                     {filters.map(filter => {
-                        const btnClass = filter === 'all' ? 'btn btn-outline-dark' :
-                            filter === 'fire' ? 'btn btn-danger' :
-                                filter === 'water' ? 'btn btn-primary' :
-                                    filter === 'wind' ? 'btn btn-success' :
-                                        filter === 'earth' ? 'btn btn-secondary' : 'btn btn-outline-dark';
                         return (
                             <button
                                 key={filter}
-                                className={`${btnClass} ${activeFilter === filter ? 'active' : ''}`}
+                                className={classNames(getBtnClass(filter), { active: activeFilter === filter })}
                                 onClick={() => changeFilter(filter)}
                             >
                                 {filter === 'all' ? 'Все' : filter}
