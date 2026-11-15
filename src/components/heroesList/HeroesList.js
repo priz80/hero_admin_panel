@@ -1,7 +1,7 @@
 import {useHttp} from '../../hooks/http.hook';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { createSelector } from 'reselect';
 import { heroesFetching, heroesFetched, heroesFetchingError, heroDelete, filtersFetched } from '../../actions';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
@@ -11,19 +11,35 @@ import Spinner from '../spinner/Spinner';
 // Усложненная задача:
 // Удаление идет и с json файла при помощи метода DELETE
 
+const heroesSelector = (state) => state.heroes.heroes;
+const filterSelector = (state) => state.filters.activeFilter;
+
+const filteredHeroesSelector = createSelector(
+    [heroesSelector, filterSelector],
+    (heroes, activeFilter) => {
+        if (activeFilter === 'all') {
+            return heroes;
+        }
+        return heroes.filter(hero => hero.element === activeFilter);
+    }
+);
+
 const HeroesList = () => {
-    const {heroes, heroesLoadingStatus, activeFilter} = useSelector(state => state);
+    const heroes = useSelector(heroesSelector);
+    const activeFilter = useSelector(filterSelector);
+    const filteredHeroes = useSelector(filteredHeroesSelector);
+    const { heroesLoadingStatus } = useSelector(state => state.heroes);
     const dispatch = useDispatch();
-    const {request} = useHttp();
+    const { request } = useHttp();
 
     useEffect(() => {
         dispatch(heroesFetching());
         request("http://localhost:3001/heroes")
             .then(data => dispatch(heroesFetched(data)))
-            .catch(() => dispatch(heroesFetchingError()))
+            .catch(() => dispatch(heroesFetchingError()));
 
         request("http://localhost:3001/filters")
-            .then(data => dispatch(filtersFetched(data)))
+            .then(data => dispatch(filtersFetched(data)));
 
         // eslint-disable-next-line
     }, []);
@@ -31,7 +47,7 @@ const HeroesList = () => {
     if (heroesLoadingStatus === "loading") {
         return <Spinner/>;
     } else if (heroesLoadingStatus === "error") {
-        return <h5 className="text-center mt-5">Ошибка загрузки</h5>
+        return <h5 className="text-center mt-5">Ошибка загрузки</h5>;
     }
 
     const deleteHero = async (id) => {
@@ -45,24 +61,20 @@ const HeroesList = () => {
 
     const renderHeroesList = (arr) => {
         if (arr.length === 0) {
-            return <h5 className="text-center mt-5">Героев пока нет</h5>
+            return <h5 className="text-center mt-5">Героев пока нет</h5>;
         }
 
-        const filteredHeroes = activeFilter === 'all'
-            ? arr
-            : arr.filter(hero => hero.element === activeFilter);
-
-        return filteredHeroes.map(({id, ...props}) => {
+        return arr.map(({id, ...props}) => {
             return <HeroesListItem key={id} {...props} id={id} onDelete={deleteHero}/>
-        })
+        });
     }
 
-    const elements = renderHeroesList(heroes);
+    const elements = renderHeroesList(filteredHeroes);
     return (
         <ul>
             {elements}
         </ul>
-    )
-}
+    );
+};
 
 export default HeroesList;
