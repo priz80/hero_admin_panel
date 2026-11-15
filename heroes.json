@@ -13,16 +13,10 @@
       "element": "wind"
     },
     {
-      "id": "233189a7-bcd0-4e64-8f2f-6d4904442af0",
+      "id": "1c94bc07-09d9-4612-b212-b923cf784102",
       "name": "user",
-      "description": "all",
-      "element": "all"
-    },
-    {
-      "id": "f22b8afa-9526-4fe2-8b70-9a9ccd29d6de",
-      "name": "Igor",
-      "description": "water",
-      "element": "water"
+      "description": "earth",
+      "element": "earth"
     }
   ],
   "filters": [
