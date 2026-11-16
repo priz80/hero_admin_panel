@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { heroAdd } from "../heroesList/heroesSlice";
-import { useHttp } from "../../hooks/http.hook";
+import { fetchFilters } from "../heroesFilters/filtersSlice";
 
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
@@ -21,7 +21,11 @@ const HeroesAddForm = () => {
 
   const { filters } = useSelector((state) => state.filters);
   const dispatch = useDispatch();
-  const { request } = useHttp();
+
+  useEffect(() => {
+    dispatch(fetchFilters());
+    // eslint-disable-next-line
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,11 +38,13 @@ const HeroesAddForm = () => {
     };
 
     try {
-      const data = await request(
-        "http://localhost:3001/heroes",
-        "POST",
-        JSON.stringify(hero),
-      );
+      const response = await fetch("http://localhost:3001/heroes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(hero),
+      });
+      if (!response.ok) throw new Error("Could not create hero");
+      const data = await response.json();
       dispatch(heroAdd(data));
       setName("");
       setDescription("");
