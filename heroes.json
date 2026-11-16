@@ -7,16 +7,10 @@
       "element": "fire"
     },
     {
-      "id": 2,
-      "name": "Неизвестный герой",
-      "description": "Скрывающийся в тени",
-      "element": "wind"
-    },
-    {
-      "id": "1c94bc07-09d9-4612-b212-b923cf784102",
+      "id": "7c38d238-fc8c-43b1-97b3-8cd526eda700",
       "name": "user",
-      "description": "earth",
-      "element": "earth"
+      "description": "wind",
+      "element": "wind"
     }
   ],
   "filters": [
