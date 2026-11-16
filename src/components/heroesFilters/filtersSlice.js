@@ -47,7 +47,7 @@ export const { filterChanged: filterChangedAction } = filtersSlice.actions;
 export const filterChanged = (filter) => (dispatch) => {
   setTimeout(() => {
     dispatch(filterChangedAction(filter));
-  }, 2000);
+  }, 1000);
 };
 
 export default filtersSlice.reducer;
