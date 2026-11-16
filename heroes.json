@@ -11,6 +11,18 @@
       "name": "Igor",
       "description": "all",
       "element": "all"
+    },
+    {
+      "id": "f1554a8a-30f4-4cad-9bc3-3006d8a2e94a",
+      "name": "user",
+      "description": "water",
+      "element": "water"
+    },
+    {
+      "id": "0935aafa-1ba2-4ab9-8ac2-0f1c04303622",
+      "name": "Wind",
+      "description": "wind",
+      "element": "wind"
     }
   ],
   "filters": [

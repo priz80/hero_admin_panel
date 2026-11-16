@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "@reduxjs/toolkit";
-import { heroDelete, fetchHeroes } from "./heroesSlice";
+import { heroDelete, fetchHeroes, selectAll } from "./heroesSlice";
 import { fetchFilters } from "../heroesFilters/filtersSlice";
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from "../spinner/Spinner";
@@ -11,7 +11,7 @@ import Spinner from "../spinner/Spinner";
 // Усложненная задача:
 // Удаление идет и с json файла при помощи метода DELETE
 
-const heroesSelector = (state) => state.heroes.heroes;
+const heroesSelector = selectAll;
 const filterSelector = (state) => state.filters.activeFilter;
 
 const filteredHeroesSelector = createSelector(

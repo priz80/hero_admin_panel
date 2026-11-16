@@ -1,4 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
+
+const heroesAdapter = createEntityAdapter();
 
 export const fetchHeroes = createAsyncThunk(
   "heroes/fetchHeroes",
@@ -10,25 +16,27 @@ export const fetchHeroes = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
-const initialState = {
-  heroes: [],
-  heroesLoadingStatus: "idle",
-};
+// const initialState = {
+//   heroes: [],
+//   heroesLoadingStatus: "idle",
+// };
+
+const initialState = heroesAdapter.getInitialState({
+  heroesLoadingStatus: 'idle',  
+});
 
 const heroesSlice = createSlice({
   name: "heroes",
   initialState,
   reducers: {
     heroAdd: (state, action) => {
-      state.heroes.push(action.payload);
+      heroesAdapter.addOne(state, action.payload);
     },
     heroDelete: (state, action) => {
-      state.heroes = state.heroes.filter(
-        (item) => item.id !== action.payload
-      );
+      heroesAdapter.removeOne(state, action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -38,7 +46,7 @@ const heroesSlice = createSlice({
       })
       .addCase(fetchHeroes.fulfilled, (state, action) => {
         state.heroesLoadingStatus = "idle";
-        state.heroes = action.payload;
+        heroesAdapter.setAll(state, action.payload);
       })
       .addCase(fetchHeroes.rejected, (state) => {
         state.heroesLoadingStatus = "error";
@@ -49,3 +57,5 @@ const heroesSlice = createSlice({
 export const { heroAdd, heroDelete } = heroesSlice.actions;
 
 export default heroesSlice.reducer;
+
+export const {selectAll} = heroesAdapter.getSelectors(state => state.heroes)
