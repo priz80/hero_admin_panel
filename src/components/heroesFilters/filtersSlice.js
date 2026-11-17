@@ -1,15 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchFilters } from "../../services/api";
 
-export const fetchFilters = createAsyncThunk(
+export const fetchFiltersAsync = createAsyncThunk(
   "filters/fetchFilters",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetch("http://localhost:3001/filters");
-      if (!response.ok) throw new Error("Could not fetch filters");
-      return await response.json();
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+  async () => {
+    return await fetchFilters();
   }
 );
 
@@ -29,14 +24,14 @@ const filtersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFilters.pending, (state) => {
+      .addCase(fetchFiltersAsync.pending, (state) => {
         state.filtersLoadingStatus = "loading";
       })
-      .addCase(fetchFilters.fulfilled, (state, action) => {
+      .addCase(fetchFiltersAsync.fulfilled, (state, action) => {
         state.filtersLoadingStatus = "idle";
         state.filters = action.payload;
       })
-      .addCase(fetchFilters.rejected, (state) => {
+      .addCase(fetchFiltersAsync.rejected, (state) => {
         state.filtersLoadingStatus = "error";
       });
   },

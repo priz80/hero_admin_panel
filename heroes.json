@@ -23,6 +23,12 @@
       "name": "Wind",
       "description": "wind",
       "element": "wind"
+    },
+    {
+      "id": "449b3e20-e007-48ff-85a3-4050a6c949f5",
+      "name": "Какой то герой",
+      "description": "че то типа умеет с землей",
+      "element": "earth"
     }
   ],
   "filters": [

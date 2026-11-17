@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "@reduxjs/toolkit";
-import { heroDelete, fetchHeroes, selectAll } from "./heroesSlice";
+import { fetchHeroesAsync, heroDeleteAsync } from "./heroesSlice";
+import { selectAllHeroes } from "./heroesSlice";
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from "../spinner/Spinner";
 
@@ -13,7 +14,7 @@ import Spinner from "../spinner/Spinner";
 const filterSelector = (state) => state.filters.activeFilter;
 
 const filteredHeroesSelector = createSelector(
-  [selectAll, filterSelector],
+  [selectAllHeroes, filterSelector],
   (heroes, activeFilter) => {
     if (activeFilter === "all") {
       return heroes;
@@ -28,7 +29,7 @@ const HeroesList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchHeroes());
+    dispatch(fetchHeroesAsync());
     // eslint-disable-next-line
   }, []);
 
@@ -39,15 +40,7 @@ const HeroesList = () => {
   }
 
   const deleteHero = async (id) => {
-    try {
-      const response = await fetch("http://localhost:3001/heroes/" + id, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Could not delete hero");
-      dispatch(heroDelete(id));
-    } catch (error) {
-      console.error("Ошибка при удалении героя:", error);
-    }
+    dispatch(heroDeleteAsync(id));
   };
 
   const renderHeroesList = (arr) => {
