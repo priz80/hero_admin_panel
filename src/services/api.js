@@ -25,6 +25,9 @@ export const fetchFilters = async () => {
 };
 
 export const addHero = async (hero) => {
+  if (!isLocalhost) {
+    return hero;
+  }
   const url = isLocalhost
     ? "http://localhost:3001/heroes"
     : `${BASE_PATH}/data/heroes.json`;
@@ -38,6 +41,9 @@ export const addHero = async (hero) => {
 };
 
 export const deleteHero = async (id) => {
+  if (!isLocalhost) {
+    return;
+  }
   const url = isLocalhost
     ? `http://localhost:3001/heroes/${id}`
     : `${BASE_PATH}/data/heroes.json/${id}`;
